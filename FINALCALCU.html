@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Arithmetic Operators</title>
+    <link rel="stylesheet" href="calcustyle.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Arithmetic Operators</h1>
+            <p class="subtitle">Group 1: JavaScript Arithmetic Operators</p>
+        </div>
+
+        <nav class="nav-bar">
+            <button class="nav-btn active" onclick="showCalculator('basic')">Basic Calculator</button>
+            <button class="nav-btn" onclick="showCalculator('discount')">Discount Calculator</button>
+            <button class="nav-btn" onclick="showCalculator('currency')">Currency Converter</button>
+            <button class="nav-btn" onclick="showCalculator('savings')">Savings Calculator</button>
+        </nav>
+
+       
+        <div id="basic" class="calculator-section active">
+            <div class="card">
+                <h2>Basic Calculator</h2>
+                <div class="calc-display" id="calcDisplay">0</div>
+                <div class="calculator-buttons">
+                    <button class="calc-btn" onclick="appendCalc('7')">7</button>
+                    <button class="calc-btn" onclick="appendCalc('8')">8</button>
+                    <button class="calc-btn" onclick="appendCalc('9')">9</button>
+                    <button class="calc-btn" onclick="appendCalc('/')">/</button>
+                    <button class="calc-btn" onclick="appendCalc('4')">4</button>
+                    <button class="calc-btn" onclick="appendCalc('5')">5</button>
+                    <button class="calc-btn" onclick="appendCalc('6')">6</button>
+                    <button class="calc-btn" onclick="appendCalc('*')">×</button>
+                    <button class="calc-btn" onclick="appendCalc('1')">1</button>
+                    <button class="calc-btn" onclick="appendCalc('2')">2</button>
+                    <button class="calc-btn" onclick="appendCalc('3')">3</button>
+                    <button class="calc-btn" onclick="appendCalc('-')">-</button>
+                    <button class="calc-btn" onclick="appendCalc('0')">0</button>
+                    <button class="calc-btn" onclick="appendCalc('.')">.</button>
+                    <button class="calc-btn" onclick="calculateCalc()">=</button>
+                    <button class="calc-btn" onclick="appendCalc('+')">+</button>
+                </div>
+                <button class="clear-btn" onclick="clearCalc()">Clear</button>
+            </div>
+        </div>
+
+        
+        <div id="discount" class="calculator-section">
+            <div class="card">
+                <h2>Discount Calculator</h2>
+                <div class="input-group">
+                    <label>Original Price (₱)</label>
+                    <input type="number" id="originalPrice" placeholder="Enter original price" min="0" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label>Discount Percentage (%)</label>
+                    <input type="number" id="discountPercent" placeholder="Enter discount %" min="0" max="100" step="0.01">
+                </div>
+                <button class="action-btn" onclick="calculateDiscount()">Calculate Discount</button>
+                <div class="result" id="discountResult">
+                    <strong>Discount Amount:</strong> ₱<span id="discountAmount"></span><br><br>
+                    <strong>Final Price:</strong>
+                    <div class="result-value">₱<span id="finalPrice"></span></div>
+                    <strong>You Save:</strong> <span id="savedAmount"></span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="currency" class="calculator-section">
+            <div class="card">
+                <h2>Currency Converter</h2>
+                <p style="color: #ff9800; font-size: 13px; margin-bottom: 15px;">Note: Exchange rates are approximate and may not reflect current market rates.</p>
+                <div class="input-group">
+                    <label>Amount</label>
+                    <input type="number" id="amount" placeholder="Enter amount" min="0" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label>Convert From → To</label>
+                    <select id="currencyPair">
+                        <option value="USD-PHP">USD → PHP</option>
+                        <option value="PHP-USD">PHP → USD</option>
+                        <option value="USD-EUR">USD → EUR</option>
+                        <option value="EUR-USD">EUR → USD</option>
+                        <option value="PHP-EUR">PHP → EUR</option>
+                        <option value="EUR-PHP">EUR → PHP</option>
+                    </select>
+                </div>
+                <button class="action-btn" onclick="convertCurrency()">Convert</button>
+                <div class="result" id="conversionResult">
+                    <strong id="currencyLabel"></strong>
+                    <div class="result-value"><span id="convertedValue"></span></div>
+                </div>
+            </div>
+        </div>
+
+    
+        <div id="savings" class="calculator-section">
+            <div class="card">
+                <h2>Savings Calculator</h2>
+                <div class="input-group">
+                    <label>Initial Savings (₱)</label>
+                    <input type="number" id="initial" placeholder="Enter initial savings" min="0" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label>Monthly Deposit (₱)</label>
+                    <input type="number" id="monthly" placeholder="Enter monthly deposit" min="0" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label>Annual Interest Rate (%)</label>
+                    <input type="number" id="rate" placeholder="Enter interest rate" min="0" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label>Years</label>
+                    <input type="number" id="years" placeholder="Enter number of years" min="0" step="1">
+                </div>
+                <button class="action-btn" onclick="calculateSavings()">Calculate Savings</button>
+                <h3 id="savingsResult" style="color: #2e7d32; text-align: center; margin-top: 20px;"></h3>
+            </div>
+        </div>
+    </div>
+
+    <button class="dark-mode-toggle" id="darkModeBtn" onclick="toggleDarkMode()">Dark Mode</button>
+
+    <script>
+      
+        function showCalculator(calcId) {
+        
+            const sections = document.querySelectorAll('.calculator-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+           
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            
+            document.getElementById(calcId).classList.add('active');
+            
+            
+            event.target.classList.add('active');
+        }
+
+        // Borquel
+        let calcExpression = '';
+        let calcDisplay = document.getElementById('calcDisplay');
+
+        function appendCalc(value) {
+            if (calcExpression === '0' && value !== '.') {
+                calcExpression = value;
+            } else {
+                calcExpression += value;
+            }
+            calcDisplay.textContent = calcExpression;
+        }
+
+        function calculateCalc() {
+            try {
+                const result = eval(calcExpression);
+                calcExpression = result.toString();
+                calcDisplay.textContent = result;
+            } catch (error) {
+                calcDisplay.textContent = 'Error';
+                calcExpression = '';
+            }
+        }
+
+        function clearCalc() {
+            calcExpression = '';
+            calcDisplay.textContent = '0';
+        }
+
+        // Borquel
+        function calculateDiscount() {
+            const original = parseFloat(document.getElementById('originalPrice').value);
+            const discount = parseFloat(document.getElementById('discountPercent').value);
+
+            if (isNaN(original) || isNaN(discount)) {
+                alert('Please enter valid numbers');
+                return;
+            }
+
+            const discountAmount = original * (discount / 100);
+            const finalPrice = original - discountAmount;
+
+            document.getElementById('discountAmount').textContent = discountAmount.toFixed(2);
+            document.getElementById('finalPrice').textContent = finalPrice.toFixed(2);
+            document.getElementById('savedAmount').textContent = `₱${discountAmount.toFixed(2)} (${discount}%)`;
+            document.getElementById('discountResult').classList.add('show');
+        }
+
+        // D. Due, Ocena
+        function convertCurrency() {
+            const amount = parseFloat(document.getElementById('amount').value);
+            const pair = document.getElementById('currencyPair').value;
+
+            if (isNaN(amount)) {
+                alert("Please enter a valid number");
+                return;
+            }
+
+            const rates = {
+                "USD-PHP": 56.50,
+                "PHP-USD": 1 / 56.50,
+                "USD-EUR": 0.94,
+                "EUR-USD": 1 / 0.94,
+                "PHP-EUR": 0.017,
+                "EUR-PHP": 1 / 0.017
+            };
+
+            const converted = amount * rates[pair];
+            const label = pair.replace("-", " to ");
+
+            document.getElementById("currencyLabel").textContent = label;
+            document.getElementById("convertedValue").textContent = converted.toFixed(2);
+            document.getElementById("conversionResult").classList.add("show");
+        }
+
+        // Corteza, Jimenez, Morallos
+        function calculateSavings() {
+            let initial = parseFloat(document.getElementById("initial").value);
+            let monthly = parseFloat(document.getElementById("monthly").value);
+            let rate = parseFloat(document.getElementById("rate").value) / 100;
+            let years = parseFloat(document.getElementById("years").value);
+
+            if (isNaN(initial) || isNaN(monthly) || isNaN(rate) || isNaN(years)) {
+                alert('Please enter valid numbers in all fields');
+                return;
+            }
+
+            let months = years * 12;
+            let monthlyRate = rate / 12;
+
+            let future =
+                initial * Math.pow(1 + monthlyRate, months) +
+                monthly * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+
+            document.getElementById("savingsResult").innerHTML =
+                "Total Savings After " + years + " Years: ₱" + future.toFixed(2);
+        }
+
+        // D. Due, Ocena
+        function toggleDarkMode() {
+            document.body.classList.toggle("night");
+            const btn = document.getElementById("darkModeBtn");
+            
+            if (document.body.classList.contains("night")) {
+                btn.textContent = "Light Mode";
+            } else {
+                btn.textContent = "Dark Mode";
+            }
+        }
+    </script>
+</body>
+</html>
